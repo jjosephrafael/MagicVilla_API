@@ -66,8 +66,15 @@ namespace MagicVilla_VillaAPI.Controllers
         // When working with HTTP post typically the object that you receive is FromBody so add the attribute before the object
         public ActionResult<VillaDTO> CreateVilla([FromBody]VillaDTO villaDTO)
         {
-            if(!ModelState.IsValid)
+            //if(!ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+
+            if(VillaStore.villaList.FirstOrDefault(u=>u.Name.ToLower() == villaDTO.Name.ToLower()) != null)
             {
+                // Key should be unique, it can also be empty
+                ModelState.AddModelError("CustomError", "Villa already Exists!");
                 return BadRequest(ModelState);
             }
             
