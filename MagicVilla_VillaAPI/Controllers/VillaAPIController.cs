@@ -8,7 +8,9 @@ namespace MagicVilla_VillaAPI.Controllers
     // Rename VillaApi to Villa APIController. Then add : ControllerBase where Controller was derived from
     // [ApiController] attribute to define that it's an API Controller
 
-    // Set a route scheme is [Route("api/ControllerName")] or [Route("api/[controller]")] to automatically map it
+    // Set a route scheme is [Route("api/ControllerName")] or [Route("api/[controller]")] to automatically map it. 
+    // [ApiController] helps in adding validations, if you don't want to add [ApiController] but want validations add the !ModelState.IsValid before a 
+    // Create and Update
     [Route("api/VillaAPI")]
     [ApiController]
     public class VillaAPIController : ControllerBase
@@ -64,6 +66,11 @@ namespace MagicVilla_VillaAPI.Controllers
         // When working with HTTP post typically the object that you receive is FromBody so add the attribute before the object
         public ActionResult<VillaDTO> CreateVilla([FromBody]VillaDTO villaDTO)
         {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            
             if(villaDTO == null)
             {
                 return BadRequest(villaDTO);
