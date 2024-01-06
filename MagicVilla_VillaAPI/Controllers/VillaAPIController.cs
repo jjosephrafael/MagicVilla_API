@@ -26,7 +26,9 @@ namespace MagicVilla_VillaAPI.Controllers
         // You can also define its datatype by using [HttpGet("{id:int}")]
         // Define the response type that will be produced [ProducesResponseType]
         // Define the type by using ActionResult<VillaDTO> or [ProducesResponseType(200, Type = typeof(VillaDTO))]
-        [HttpGet("{id:int}")]
+        // Define the route name
+        //[HttpGet("{id:int}"]
+        [HttpGet("{id:int}",Name="GetVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -52,8 +54,11 @@ namespace MagicVilla_VillaAPI.Controllers
         }
 
 
+        // Add the StatusCode 201
+        
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]        
+        //[ProducesResponseType(StatusCodes.Status200OK)]        
+        [ProducesResponseType(StatusCodes.Status201Created)]        
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         // When working with HTTP post typically the object that you receive is FromBody so add the attribute before the object
@@ -72,7 +77,9 @@ namespace MagicVilla_VillaAPI.Controllers
             villaDTO.Id = VillaStore.villaList.OrderByDescending(u => u.Id).FirstOrDefault().Id + 1;
             VillaStore.villaList.Add(villaDTO);
 
-            return Ok(villaDTO);
+            // Created a route will define the route it will be created and assign value to the parameter being passed
+            //return Ok(villaDTO);
+            return CreatedAtRoute("GetVilla", new {  id = villaDTO.Id }, villaDTO);
         }
     }
 }
