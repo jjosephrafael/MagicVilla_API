@@ -1,6 +1,7 @@
 ﻿using MagicVilla_VillaAPI.Data;
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Models.Dto;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
 namespace MagicVilla_VillaAPI.Controllers
@@ -30,7 +31,7 @@ namespace MagicVilla_VillaAPI.Controllers
         // Define the type by using ActionResult<VillaDTO> or [ProducesResponseType(200, Type = typeof(VillaDTO))]
         // Define the route name
         //[HttpGet("{id:int}"]
-        [HttpGet("{id:int}",Name="GetVilla")]
+        [HttpGet("{id:int}", Name = "GetVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -42,10 +43,10 @@ namespace MagicVilla_VillaAPI.Controllers
             if (id == 0)
             {
                 // Bad Request
-                return BadRequest(); 
+                return BadRequest();
             }
             var villa = VillaStore.villaList.FirstOrDefault(u => u.Id == id);
-            if(villa == null)
+            if (villa == null)
             {
                 // Return Not Found
                 return NotFound();
@@ -57,33 +58,33 @@ namespace MagicVilla_VillaAPI.Controllers
 
 
         // Add the StatusCode 201
-        
+
         [HttpPost]
         //[ProducesResponseType(StatusCodes.Status200OK)]        
-        [ProducesResponseType(StatusCodes.Status201Created)]        
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         // When working with HTTP post typically the object that you receive is FromBody so add the attribute before the object
-        public ActionResult<VillaDTO> CreateVilla([FromBody]VillaDTO villaDTO)
+        public ActionResult<VillaDTO> CreateVilla([FromBody] VillaDTO villaDTO)
         {
             //if(!ModelState.IsValid)
             //{
             //    return BadRequest(ModelState);
             //}
 
-            if(VillaStore.villaList.FirstOrDefault(u=>u.Name.ToLower() == villaDTO.Name.ToLower()) != null)
+            if (VillaStore.villaList.FirstOrDefault(u => u.Name.ToLower() == villaDTO.Name.ToLower()) != null)
             {
                 // Key should be unique, it can also be empty
                 ModelState.AddModelError("CustomError", "Villa already Exists!");
                 return BadRequest(ModelState);
             }
-            
-            if(villaDTO == null)
+
+            if (villaDTO == null)
             {
                 return BadRequest(villaDTO);
             }
 
-            if(villaDTO.Id > 0) 
+            if (villaDTO.Id > 0)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -93,7 +94,7 @@ namespace MagicVilla_VillaAPI.Controllers
 
             // Created a route will define the route it will be created and assign value to the parameter being passed
             //return Ok(villaDTO);
-            return CreatedAtRoute("GetVilla", new {  id = villaDTO.Id }, villaDTO);
+            return CreatedAtRoute("GetVilla", new { id = villaDTO.Id }, villaDTO);
         }
 
         // using IActionResult you do not need to define the return type, in ActionResult you need to.
@@ -110,7 +111,7 @@ namespace MagicVilla_VillaAPI.Controllers
 
             var villa = VillaStore.villaList.FirstOrDefault(u => u.Id == id);
 
-            if (villa == null) 
+            if (villa == null)
             {
                 return NotFound();
             }
@@ -127,7 +128,7 @@ namespace MagicVilla_VillaAPI.Controllers
         public IActionResult UpdateVilla(int id, [FromBody] VillaDTO villaDTO)
         {
             if (villaDTO == null || id != villaDTO.Id)
-            { 
+            {
                 return BadRequest();
             }
             var villa = VillaStore.villaList.FirstOrDefault(u => u.Id == id);
@@ -139,10 +140,30 @@ namespace MagicVilla_VillaAPI.Controllers
             return NoContent();
         }
 
+
         // Add the following Nuget package for the HTTP Patch
         // Microsoft.AspNetCore.JsonPatch
         // Microsoft.AspNetCore.Mvc.NewtonsoftJson
-
-
+        [HttpPatch("{id:int}", Name = "UpdatePartialVilla")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult UpdatePartialVilla(int id, JsonPatchDocument<VillaDTO> patchDTO)
+        {
+            if (patchDTO == null || id == 0)
+            {
+                return BadRequest();
+            }
+            var villa = VillaStore.villaList.FirstOrDefault(u => u.Id == id);
+            if (villa == null) 
+            {
+                return BadRequest();
+            }
+            patchDTO.ApplyTo(villa, ModelState);
+            if (!ModelState.IsValid)
+            { 
+                return BadRequest(ModelState);
+            }
+            return NoContent();
+        }
     }
 }
