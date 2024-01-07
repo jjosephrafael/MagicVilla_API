@@ -16,12 +16,25 @@ namespace MagicVilla_VillaAPI.Controllers
     [ApiController]
     public class VillaAPIController : ControllerBase
     {
+        private readonly ILogger<VillaAPIController> _logger;
+
+        // ctor to create a constructor for Ilogger and use dependency injection. Ctrl. on logger to create a private readonly field.
+        // this will provide the implementation of ILogger<VillaAPIController> to logger
+        public VillaAPIController(ILogger<VillaAPIController> logger)
+        {
+            _logger = logger;
+        }
+
+
+
         // Define the Verb on the endpoint
         // If you do not want to include all property of the model use DTO
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<VillaDTO>> GetVillas()
         {
+            // to log information
+            _logger.LogInformation("Getting all villas");
             return Ok(VillaStore.villaList);
         }
 
@@ -35,13 +48,12 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        //[ProducesResponseType(200)]
-        //[ProducesResponseType(404)]
-        //[ProducesResponseType(400)]
         public ActionResult<VillaDTO> GetVilla(int id)
         {
             if (id == 0)
             {
+                // to log error
+                _logger.LogError("Get Villa Error with Id " + id);
                 // Bad Request
                 return BadRequest();
             }
@@ -154,13 +166,13 @@ namespace MagicVilla_VillaAPI.Controllers
                 return BadRequest();
             }
             var villa = VillaStore.villaList.FirstOrDefault(u => u.Id == id);
-            if (villa == null) 
+            if (villa == null)
             {
                 return BadRequest();
             }
             patchDTO.ApplyTo(villa, ModelState);
             if (!ModelState.IsValid)
-            { 
+            {
                 return BadRequest(ModelState);
             }
             return NoContent();
