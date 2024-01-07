@@ -139,5 +139,10 @@ namespace MagicVilla_VillaAPI.Controllers
             return NoContent();
         }
 
+        // Add the following Nuget package for the HTTP Patch
+        // Microsoft.AspNetCore.JsonPatch
+        // Microsoft.AspNetCore.Mvc.NewtonsoftJson
+
+
     }
 }
