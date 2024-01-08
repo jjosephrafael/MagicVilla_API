@@ -1,4 +1,5 @@
 ﻿using MagicVilla_VillaAPI.Data;
+using MagicVilla_VillaAPI.Logging;
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Models.Dto;
 using Microsoft.AspNetCore.JsonPatch;
@@ -16,16 +17,24 @@ namespace MagicVilla_VillaAPI.Controllers
     [ApiController]
     public class VillaAPIController : ControllerBase
     {
-        private readonly ILogger<VillaAPIController> _logger;
 
-        // ctor to create a constructor for Ilogger and use dependency injection. Ctrl. on logger to create a private readonly field.
-        // this will provide the implementation of ILogger<VillaAPIController> to logger
-        public VillaAPIController(ILogger<VillaAPIController> logger)
+        //// USING THE DEFAULT LOGGER
+        //private readonly ILogger<VillaAPIController> _logger;
+
+        //// CTOR to create a constructor for Ilogger and use dependency injection. Ctrl. on logger to create a private readonly field.
+        //// this will provide the implementation of ILogger<VillaAPIController> to logger
+        //public VillaAPIController(ILogger<VillaAPIController> logger)
+        //{
+        //    _logger = logger;
+        //}
+
+        //// USING A CUSTOM LOGGER
+
+        private readonly ILogging _logger;
+        public VillaAPIController(ILogging logger) 
         {
             _logger = logger;
         }
-
-
 
         // Define the Verb on the endpoint
         // If you do not want to include all property of the model use DTO
@@ -33,8 +42,11 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<VillaDTO>> GetVillas()
         {
-            // to log information
-            _logger.LogInformation("Getting all villas");
+            // to log information using default
+            //_logger.LogInformation("Getting all villas");
+
+            // to log information using custom logging
+            _logger.Log("Getting all villas","");
             return Ok(VillaStore.villaList);
         }
 
@@ -53,7 +65,12 @@ namespace MagicVilla_VillaAPI.Controllers
             if (id == 0)
             {
                 // to log error
-                _logger.LogError("Get Villa Error with Id " + id);
+                // to log information using default
+                //_logger.LogError("Get Villa Error with Id " + id);
+
+                // to log information using custom logging
+                _logger.Log("Get Villa Error with Id " + id, "error");
+
                 // Bad Request
                 return BadRequest();
             }
