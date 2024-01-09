@@ -1,5 +1,8 @@
 //using Serilog;
 
+using MagicVilla_VillaAPI.Data;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // NUGET PACKAGES
@@ -25,12 +28,20 @@ var builder = WebApplication.CreateBuilder(args);
 //// tells the application that it does not have to use the built in logging but will now use serilog logging.
 //builder.Host.UseSerilog();
 
+
+
+builder.Services.AddDbContext<ApplicationDbContext>(option =>
+{
+    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnection"));
+});
+
 // add .AddNewtonsoftJson(); to builder.Services.AddControllers() to register the nuget package added
 // add to .AddControllers(option => { option.ReturnHttpNotAcceptable = true; }) this to make sure only Json will be accepted
 // to accept xml also .AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
-builder.Services.AddControllers(option => { 
+builder.Services.AddControllers(option =>
+{
     //option.ReturnHttpNotAcceptable = true; 
-    }).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
+}).AddNewtonsoftJson().AddXmlDataContractSerializerFormatters();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
