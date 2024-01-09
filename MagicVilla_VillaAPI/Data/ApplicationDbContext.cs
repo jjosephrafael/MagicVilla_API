@@ -13,3 +13,9 @@ namespace MagicVilla_VillaAPI.Data
         public DbSet<Villa> Villas { get; set; }
     }
 }
+
+
+// Script to add migration to SQL table, make sure to change the Default Project before doing migration
+// add-migration AddVillaTable
+// Script to update the database after migratiom
+// update-database
