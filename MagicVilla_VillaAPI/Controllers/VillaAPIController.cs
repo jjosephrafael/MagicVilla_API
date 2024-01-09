@@ -16,13 +16,13 @@ namespace MagicVilla_VillaAPI.Controllers
     [ApiController]
     public class VillaAPIController : ControllerBase
     {
-        private readonly ILogger<VillaAPIController> _logger;
+        //private readonly ILogger<VillaAPIController> _logger;
 
         // ctor to create a constructor for Ilogger and use dependency injection. Ctrl. on logger to create a private readonly field.
         // this will provide the implementation of ILogger<VillaAPIController> to logger
-        public VillaAPIController(ILogger<VillaAPIController> logger)
+        public VillaAPIController()
         {
-            _logger = logger;
+            
         }
 
 
@@ -33,8 +33,6 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<VillaDTO>> GetVillas()
         {
-            // to log information
-            _logger.LogInformation("Getting all villas");
             return Ok(VillaStore.villaList);
         }
 
@@ -52,8 +50,6 @@ namespace MagicVilla_VillaAPI.Controllers
         {
             if (id == 0)
             {
-                // to log error
-                _logger.LogError("Get Villa Error with Id " + id);
                 // Bad Request
                 return BadRequest();
             }
