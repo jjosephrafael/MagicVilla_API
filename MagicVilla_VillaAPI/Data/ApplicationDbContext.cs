@@ -7,6 +7,9 @@ namespace MagicVilla_VillaAPI.Data
     // Create the Connection String in appsettings.json
     public class ApplicationDbContext : DbContext
     {
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+        }
         public DbSet<Villa> Villas { get; set; }
     }
 }
