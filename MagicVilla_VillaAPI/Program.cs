@@ -6,6 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Microsoft.AspNetCore.JsonPatch
 //Microsoft.AspNetCore.Mvc.NewtonsoftJson
+//Microsoft.EntityFrameworkCore.SqlServer
+//Microsoft.EntityFrameworkCore.Tools
+
 //Serilog.AspNetCore
 //Serilog.Sinks.File
 //Serilog.Sinks.Console
