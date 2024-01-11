@@ -1,5 +1,6 @@
 //using Serilog;
 
+using MagicVilla_VillaAPI;
 using MagicVilla_VillaAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 //Microsoft.AspNetCore.Mvc.NewtonsoftJson
 //Microsoft.EntityFrameworkCore.SqlServer
 //Microsoft.EntityFrameworkCore.Tools
+//AutoMapper
+//AutoMapper.Extensions.Microsoft.DependencyInjection
 
 //Serilog.AspNetCore
 //Serilog.Sinks.File
@@ -18,6 +21,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
+
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 //// register Serilog and create a log file with a rolling interval of daily and use CreateLogger function to edit it.
 //// right now we will use the default logger but below is the code to use serilog
