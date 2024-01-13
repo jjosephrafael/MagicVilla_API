@@ -2,6 +2,8 @@
 
 using MagicVilla_VillaAPI;
 using MagicVilla_VillaAPI.Data;
+using MagicVilla_VillaAPI.Repository;
+using MagicVilla_VillaAPI.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +26,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));
 
+// add services for Interface IVilla Repository, and add VillaRepository implementation
+builder.Services.AddScoped<IVillaRepository, VillaRepository>();
 //// register Serilog and create a log file with a rolling interval of daily and use CreateLogger function to edit it.
 //// right now we will use the default logger but below is the code to use serilog
 
