@@ -28,6 +28,7 @@ builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 // add services for Interface IVilla Repository, and add VillaRepository implementation
 builder.Services.AddScoped<IVillaRepository, VillaRepository>();
+builder.Services.AddScoped<IVillaNumberRepository, VillaNumberRepository>();
 //// register Serilog and create a log file with a rolling interval of daily and use CreateLogger function to edit it.
 //// right now we will use the default logger but below is the code to use serilog
 
