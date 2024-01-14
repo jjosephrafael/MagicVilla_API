@@ -10,7 +10,7 @@ namespace MagicVilla_VillaAPI.Models
         public int VillaNo { get; set; }
         // this is an id to the villa table
         [ForeignKey("Villa")]
-        public int VillaId { get; set; }
+        public int VillaID { get; set; }
         public Villa Villa { get; set; }
         // Foreign Key End
 
